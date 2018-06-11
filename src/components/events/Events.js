@@ -97,7 +97,7 @@ class Events extends Component {
 
 	handlePaginationPrev = () => {
 		if (this.state.currentPage === 1) { return; }
-		console.log('janusz');
+		console.log('janu22sz');
 		this.setState(prevState => ({
 			currentPage: prevState.currentPage - 1
 		}));
