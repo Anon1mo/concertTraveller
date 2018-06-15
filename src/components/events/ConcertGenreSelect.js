@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const ConcertGenreSelect = (props) => {
 	return (
 		<select onChange={props.onChange} className="custom-select form-control-md">
-			<option value="">Select genre</option>
+			<option value="">All genres</option>
 			{
 				props.genres.map((genre, i) => <option key={i} value={genre}>{genre}</option>)
 			}

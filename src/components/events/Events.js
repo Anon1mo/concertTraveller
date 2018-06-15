@@ -68,22 +68,31 @@ class Events extends Component {
 		eventsPerPage: 3
 	};
 
+	componentDidMount() {
+		this.setState({
+			lastPage: Math.ceil(this.state.events.length / this.state.eventsPerPage)
+		});
+	}
+
 	onFilterSearchChange = (event) => {
 		this.setState({
-			filterSearch: event.target.value.trim()
+			filterSearch: event.target.value.trim(),
+			currentPage: 1
 		});
 	};
 
 	onFilterGenreChange = (event) => {
 		this.setState({
-			filterGenre: event.target.value.trim()
+			filterGenre: event.target.value.trim(),
+			currentPage: 1
 		});
 	};
 
 	onDateChange = (date) => {
 		console.log(date);
 		this.setState({
-			filterDate: date
+			filterDate: date,
+			currentPage: 1
 		});
 	};
 
@@ -97,28 +106,39 @@ class Events extends Component {
 
 	handlePaginationPrev = () => {
 		if (this.state.currentPage === 1) { return; }
-		console.log('janu22sz');
 		this.setState(prevState => ({
 			currentPage: prevState.currentPage - 1
 		}));
 		console.log(this.state.currentPage);
 	};
 
+	handlePaginationNext = () => {
+		if (this.state.currentPage === this.state.lastPage) { return; }
+		this.setState(prevState => ({
+			currentPage: prevState.currentPage + 1
+		}));
+		console.log(this.state.currentPage);
+	};
+
 	generatePageNumbers = () => {
 		const pageNumbers = [];
-		for (let i = 1; i <= Math.ceil(this.state.events.length / this.state.eventsPerPage); i++) {
+		for (let i = 1; i <= this.state.lastPage; i++) {
 			pageNumbers.push(i);
 		}
+
 		return pageNumbers;
 	};
 
 
 	render() {
+		const indexOfLastTodo = this.state.currentPage * this.state.eventsPerPage;
+		const indexOfFirstTodo = indexOfLastTodo - this.state.eventsPerPage;
 		let eventsToRender = this.state.events ?
 			this.state.events
 				.filter(event => event.genre.toLowerCase().includes(this.state.filterGenre.toLowerCase()))
 				.filter(event => event.date.format('YYYY-MM-DD').includes(this.state.filterDate))
 				.filter(event => event.name.toLowerCase().includes(this.state.filterSearch.toLowerCase()))
+				.slice(indexOfFirstTodo, indexOfLastTodo)
 			:
 			[];
 		return (
@@ -140,7 +160,7 @@ class Events extends Component {
 						</div>
 					))}
 				</div>
-				<Pagination onClick={this.handlePaginationClick} onPrev={this.handlePaginationPrev} currentPage={this.state.currentPage} pageNumbers={this.generatePageNumbers()} />
+				<Pagination onClick={this.handlePaginationClick} onPrev={this.handlePaginationPrev} onNext={this.handlePaginationNext} currentPage={this.state.currentPage} pageNumbers={this.generatePageNumbers()} />
 			</main>
 		);
 	}

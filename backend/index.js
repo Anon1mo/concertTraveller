@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 
 //webpack
 app.use(require('webpack-dev-middleware')(compiler, {
+	hot: true,
 	noInfo: true,
 	publicPath: config.output.publicPath
 }));

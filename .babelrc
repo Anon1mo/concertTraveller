@@ -1,11 +1,11 @@
 {
 	"presets": ["env", "react", "stage-2"],
-	"env": {
-		"development": {
-			"presets": [
-				"react-hmre"
-			]
-		}
-	},
-	"plugins": ["transform-class-properties"]
+//	"env": {
+//		"development": {
+//			"presets": [
+//				"react-hmre"
+//			]
+//		}
+//	},
+	"plugins": ["transform-class-bound-properties", "transform-class-properties", "react-hot-loader/babel"]
 }
