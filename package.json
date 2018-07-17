@@ -9,25 +9,36 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "start": "node ./backend/index.js",
+    "start-back": "nodemon ./backend/index.js",
     "start-dev": "webpack-dev-server --config webpack.dev.js",
     "test": "jest ./test"
   },
   "author": "Piotr Jakubowski",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "bootstrap": "^4.1.1",
     "dotenv": "^6.0.0",
     "express": "^4.16.2",
+    "express-async-errors": "^2.1.0",
     "font-awesome": "^4.7.0",
+    "joi": "^13.4.0",
+    "joi-date-extensions": "^1.2.0",
+    "joi-objectid": "^2.0.0",
     "jquery": "^3.3.1",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.10",
     "moment": "^2.20.0",
+    "mongoose": "^5.0.2",
     "popper.js": "^1.14.3",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-datepicker": "^1.5.0",
     "react-dom": "^16.4.0",
     "react-hot-loader": "^4.3.1",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "winston": "^2.4.3",
+    "winston-mongodb": "^3.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
