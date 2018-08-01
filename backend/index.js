@@ -7,6 +7,8 @@ const config = require('../webpack.dev');
 const mongoose = require('mongoose');
 require('express-async-errors'); // for handling async errors, throw them to error.js
 
+require('./startup/config')();
+
 const events = require('./routes/events');
 const users = require('./routes/users');
 const offers = require('./routes/offers');
