@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import DatePick from './DatePick';
 import ConcertSearchbar from './ConcertSearchbar';
 import ConcertGenreSelect from './ConcertGenreSelect';
 import ConcertCard from './ConcertCard';
 import Pagination from './Pagination';
+import { getEvents } from '../../services/eventService';
 import moment from 'moment';
 
 let events = [
@@ -54,7 +55,7 @@ let events = [
 		date: moment('2018-11-22'),
 		description: 'Mak i jego chlopaki',
 		genre: 'indie'
-	},
+	}
 ];
 
 class Events extends Component {
@@ -68,27 +69,30 @@ class Events extends Component {
 		eventsPerPage: 3
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.setState({
 			lastPage: Math.ceil(this.state.events.length / this.state.eventsPerPage)
 		});
+
+		const { data } = await getEvents();
+		console.log(data);
 	}
 
-	onFilterSearchChange = (event) => {
+	onFilterSearchChange = event => {
 		this.setState({
 			filterSearch: event.target.value.trim(),
 			currentPage: 1
 		});
 	};
 
-	onFilterGenreChange = (event) => {
+	onFilterGenreChange = event => {
 		this.setState({
 			filterGenre: event.target.value.trim(),
 			currentPage: 1
 		});
 	};
 
-	onDateChange = (date) => {
+	onDateChange = date => {
 		console.log(date);
 		this.setState({
 			filterDate: date,
@@ -96,8 +100,10 @@ class Events extends Component {
 		});
 	};
 
-	handlePaginationClick = (event) => {
-		event.currentTarget.parentNode.getElementsByClassName('active')[0].classList.remove('active');
+	handlePaginationClick = event => {
+		event.currentTarget.parentNode
+			.getElementsByClassName('active')[0]
+			.classList.remove('active');
 		event.currentTarget.classList.add('active');
 		this.setState({
 			currentPage: Number(event.currentTarget.dataset.value)
@@ -105,7 +111,9 @@ class Events extends Component {
 	};
 
 	handlePaginationPrev = () => {
-		if (this.state.currentPage === 1) { return; }
+		if (this.state.currentPage === 1) {
+			return;
+		}
 		this.setState(prevState => ({
 			currentPage: prevState.currentPage - 1
 		}));
@@ -113,7 +121,9 @@ class Events extends Component {
 	};
 
 	handlePaginationNext = () => {
-		if (this.state.currentPage === this.state.lastPage) { return; }
+		if (this.state.currentPage === this.state.lastPage) {
+			return;
+		}
 		this.setState(prevState => ({
 			currentPage: prevState.currentPage + 1
 		}));
@@ -129,27 +139,38 @@ class Events extends Component {
 		return pageNumbers;
 	};
 
-
 	render() {
 		const indexOfLastTodo = this.state.currentPage * this.state.eventsPerPage;
 		const indexOfFirstTodo = indexOfLastTodo - this.state.eventsPerPage;
-		let eventsToRender = this.state.events ?
-			this.state.events
-				.filter(event => event.genre.toLowerCase().includes(this.state.filterGenre.toLowerCase()))
-				.filter(event => event.date.format('YYYY-MM-DD').includes(this.state.filterDate))
-				.filter(event => event.name.toLowerCase().includes(this.state.filterSearch.toLowerCase()))
-				.slice(indexOfFirstTodo, indexOfLastTodo)
-			:
-			[];
+		let eventsToRender = this.state.events
+			? this.state.events
+					.filter(event =>
+						event.genre
+							.toLowerCase()
+							.includes(this.state.filterGenre.toLowerCase())
+					)
+					.filter(event =>
+						event.date.format('YYYY-MM-DD').includes(this.state.filterDate)
+					)
+					.filter(event =>
+						event.name
+							.toLowerCase()
+							.includes(this.state.filterSearch.toLowerCase())
+					)
+					.slice(indexOfFirstTodo, indexOfLastTodo)
+			: [];
 		return (
 			<main className="container">
 				<h1 className="text-center">Events</h1>
 				<div className="form-group row">
 					<div className="col-md-6">
-						<ConcertSearchbar onChange={this.onFilterSearchChange}/>
+						<ConcertSearchbar onChange={this.onFilterSearchChange} />
 					</div>
 					<div className="col-md-3 ml-auto">
-						<ConcertGenreSelect genres={this.state.genres} onChange={this.onFilterGenreChange} />
+						<ConcertGenreSelect
+							genres={this.state.genres}
+							onChange={this.onFilterGenreChange}
+						/>
 					</div>
 					<DatePick onChangeParent={this.onDateChange} />
 				</div>
@@ -160,7 +181,13 @@ class Events extends Component {
 						</div>
 					))}
 				</div>
-				<Pagination onClick={this.handlePaginationClick} onPrev={this.handlePaginationPrev} onNext={this.handlePaginationNext} currentPage={this.state.currentPage} pageNumbers={this.generatePageNumbers()} />
+				<Pagination
+					onClick={this.handlePaginationClick}
+					onPrev={this.handlePaginationPrev}
+					onNext={this.handlePaginationNext}
+					currentPage={this.state.currentPage}
+					pageNumbers={this.generatePageNumbers()}
+				/>
 			</main>
 		);
 	}

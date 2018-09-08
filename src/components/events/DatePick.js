@@ -6,11 +6,15 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 class ExampleCustomInput extends React.Component {
-
-	render () {
+	render() {
 		return (
 			<div className="input-group">
-				<input className="form-control" onClick={this.props.onClick} value={this.props.value? this.props.value : 'Select date' }/>
+				<input
+					className="form-control"
+					onClick={this.props.onClick}
+					value={this.props.value ? this.props.value : 'Select date'}
+					readOnly
+				/>
 			</div>
 		);
 	}
@@ -22,17 +26,18 @@ ExampleCustomInput.propTypes = {
 };
 
 class DatePick extends React.Component {
-
 	state = {
 		startDate: null
 	};
 
-	handleChange = (date) => {
+	handleChange = date => {
 		console.log(date);
 		this.setState({
 			startDate: date
 		});
-		date? this.props.onChangeParent(date.format('YYYY-MM-DD')) : this.props.onChangeParent('');
+		date
+			? this.props.onChangeParent(date.format('YYYY-MM-DD'))
+			: this.props.onChangeParent('');
 	};
 
 	render() {

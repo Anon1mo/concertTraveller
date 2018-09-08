@@ -8,8 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './styles/style.scss';
 
-ReactDOM.render((
+ReactDOM.render(
 	<BrowserRouter>
 		<App />
-	</BrowserRouter>
-), document.getElementById('app'));
+	</BrowserRouter>,
+	document.getElementById('app')
+);

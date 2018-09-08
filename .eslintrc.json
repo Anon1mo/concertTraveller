@@ -6,7 +6,7 @@
         "es6": true
     },
 		"parser": "babel-eslint",
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": ["eslint:recommended", "plugin:react/recommended", "prettier", "prettier/react"],
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
@@ -18,10 +18,10 @@
         "react"
     ],
     "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
+//        "indent": [
+//            "error",
+//            "tab"
+//        ],
         "linebreak-style": [
             "error",
             "unix"

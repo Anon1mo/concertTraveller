@@ -8,10 +8,10 @@ import Profile from './Profile';
 const Main = () => (
 	<main>
 		<Switch>
-			<Route exact path='/' component={Home} />
-			<Route path='/events' component={Events} />
-			<Route path='/my_concerts' component={MyConcerts} />
-			<Route path='/profile' component={Profile} />
+			<Route exact path="/" component={Home} />
+			<Route path="/events" component={Events} />
+			<Route path="/my_concerts" component={MyConcerts} />
+			<Route path="/profile" component={Profile} />
 		</Switch>
 	</main>
 );
