@@ -66,7 +66,7 @@ class Events extends Component {
 		filterGenre: '',
 		filterDate: '',
 		currentPage: 1,
-		eventsPerPage: 3
+		eventsPerPage: 4
 	};
 
 	async componentDidMount() {
@@ -74,8 +74,16 @@ class Events extends Component {
 			lastPage: Math.ceil(this.state.events.length / this.state.eventsPerPage)
 		});
 
-		const { data } = await getEvents();
-		console.log(data);
+		let { data } = await getEvents();
+		data = this.mapDateToMoment(data);
+		this.setState({ events: data });
+	}
+
+	mapDateToMoment(data) {
+		return data.map(el => {
+			el.date = moment(el.date);
+			return el;
+		});
 	}
 
 	onFilterSearchChange = event => {

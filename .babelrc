@@ -10,5 +10,5 @@
 	"plugins": [["transform-runtime", {
 		"helpers": false,
 		"polyfill": false,
-		"regenerator": true }], "transform-class-bound-properties", "transform-class-properties", "react-hot-loader/babel"]
+		"regenerator": true }], "transform-proto-to-assign", "transform-object-assign", "transform-class-bound-properties", "transform-class-properties", "react-hot-loader/babel"]
 }

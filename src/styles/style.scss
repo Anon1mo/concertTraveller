@@ -3,6 +3,7 @@ body {
 	color: white;
 	background: black;
 	padding-top: 3.5rem;
+	height: 100%;
 }
 
 .container__card--img {
@@ -18,4 +19,13 @@ body {
 	background-color: white;
 	padding: 0 0.25rem;
 	border-radius: 1rem;
+}
+
+.list-group__div--profile > p{
+	line-height: 16px;
+	margin: 0;
+}
+
+.kolorki {
+	background-color: darkgray;
 }

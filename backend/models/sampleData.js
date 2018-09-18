@@ -1,4 +1,7 @@
-const {Event} = require('./event');
+const mongoose = require('mongoose');
+const { Event } = require('./event');
+const { Offer } = require('./offer');
+const { User } = require('./user');
 
 const arrayOfEvents = [
 	{
@@ -56,7 +59,7 @@ const arrayOfEvents = [
 		genre: 'alternative',
 		date: new Date('2019-08-11'),
 		description: 'Nowa plyta'
-	},
+	}
 ];
 
 module.exports = function() {
@@ -76,8 +79,38 @@ module.exports = function() {
 	// 	console.log(docs);
 	// });
 	arrayOfEvents.map(event => {
-		Event.findOneAndUpdate(event, event, {upsert: true})
+		Event.findOneAndUpdate(event, event, { upsert: true })
 			.then(doc => console.log(doc))
 			.catch(err => console.log(err));
 	});
+
+	const addEvent = false;
+
+	if (addEvent) {
+		Event.findOne({ name: 'Beach House' })
+			.then(event => {
+				const eventId = event._id;
+				const offerId = mongoose.Types.ObjectId();
+				const ownerId = '5b4e0c42c05fa607fe855261';
+
+				let newOffer = new Offer({
+					_id: offerId,
+					ownerId: ownerId,
+					eventId: eventId,
+					type: 'Ride',
+					description: 'Fajny wyjazd',
+					maxNumUsers: 4
+				});
+				newOffer.save().catch(err => console.log(err));
+
+				event.offers.push(offerId);
+				event.save().catch(err => console.log(err));
+
+				User.findById(ownerId).then(user => {
+					user.offers.push(offerId);
+					user.save().catch(err => console.log(err));
+				});
+			})
+			.catch(err => console.log(err));
+	}
 };

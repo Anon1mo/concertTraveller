@@ -34,12 +34,15 @@ const userSchema = new Schema({
 		min: 1,
 		max: 150
 	},
-	offers: [{type: Schema.Types.ObjectId, ref: 'Offer'}],
+	offers: [{ type: Schema.Types.ObjectId, ref: 'Offer' }],
 	isAdmin: Boolean
 });
 
 userSchema.methods.generateAuthToken = function() {
-	const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.jwtPrivateKey);
+	const token = jwt.sign(
+		{ _id: this._id, username: this.username, isAdmin: this.isAdmin },
+		process.env.jwtPrivateKey
+	);
 	return token;
 };
 
@@ -47,11 +50,25 @@ const User = mongoose.model('User', userSchema);
 
 function validateUser(user) {
 	const schema = {
-		username: Joi.string().min(1).max(50).required(),
-		email: Joi.string().min(5).max(255).required().email(),
-		password: Joi.string().min(5).max(255).required(),
-		fbLink: Joi.string().min(1).max(255),
-		age: Joi.number().min(1).max(150)
+		username: Joi.string()
+			.min(1)
+			.max(50)
+			.required(),
+		email: Joi.string()
+			.min(5)
+			.max(255)
+			.required()
+			.email(),
+		password: Joi.string()
+			.min(5)
+			.max(255)
+			.required(),
+		fbLink: Joi.string()
+			.min(1)
+			.max(255),
+		age: Joi.number()
+			.min(1)
+			.max(150)
 	};
 
 	return Joi.validate(user, schema);

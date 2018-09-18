@@ -35,7 +35,7 @@ export function saveOffer(offer) {
 }
 
 export function deleteOffer(offerId) {
-	return http.delete(offerUrl(offerId);
+	return http.delete(offerUrl(offerId));
 }
 
 export function joinOffer(offerId) {
