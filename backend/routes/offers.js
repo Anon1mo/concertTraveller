@@ -2,10 +2,11 @@ const validateObjectId = require('../middleware/validateObjectId');
 const { Offer, validate } = require('../models/offer');
 const { Event } = require('../models/event');
 const { User } = require('../models/user');
+const { Message, validateMessage } = require('../models/message');
 const auth = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();
-
+// TODO get all the offers when the user is an owner
 async function getOffers(target, id) {
 	target = target === 'event' ? 'eventId' : 'users';
 	const offers = await Offer.find({ [target]: id })
@@ -115,7 +116,10 @@ router.put('/:id/join', [auth, validateObjectId], async (req, res) => {
 
 	if (!offer)
 		return res.status(404).send('The offer with the given ID was not found');
-
+	if (req.user._id === offer.ownerId)
+		return res
+			.status(403)
+			.send('You cannot join, because you created this event');
 	if (offer.users.some(user => user.equals(req.user._id))) {
 		res.status(403).send('You are already registered to the event');
 	} else {
@@ -173,6 +177,28 @@ router.get('/event/:eventId', async (req, res) => {
 			.send('The offers for the given event were not found');
 
 	res.send(offers);
+});
+
+// send message
+router.post('/:id/message', [validateObjectId, auth], async (req, res) => {
+	const { error } = validateMessage(req.body);
+	if (error) return res.status(400).send(error.details[0].message);
+
+	const message = {
+		username: req.body.username,
+		message: req.body.message
+	};
+
+	console.log(message);
+
+	const offer = await Offer.findById(req.params.id);
+	if (!offer)
+		return res.status(404).send('The offer with the given ID was not found');
+
+	offer.chat.push(message);
+	await offer.save();
+
+	res.send(message);
 });
 
 module.exports = router;

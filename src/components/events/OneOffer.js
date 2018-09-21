@@ -1,33 +1,75 @@
 import React, { Component } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { getOffer } from '../../services/offerService';
+import Chat from './Chat';
+import { toast } from 'react-toastify';
+import { getOffer, joinOffer, leaveOffer } from '../../services/offerService';
+import auth from '../../services/authService';
 
 class OneOffer extends Component {
-	state = {
-		data: {
-			ownerId: '',
-			eventId: '',
-			type: '',
-			description: '',
-			maxNumUsers: ''
-		}
-	};
-
+	constructor() {
+		super();
+		this.state = {
+			data: {
+				ownerId: '',
+				eventId: '',
+				type: '',
+				description: '',
+				maxNumUsers: ''
+			},
+			user: null
+		};
+		this.onJoin = this.onJoin.bind(this);
+		this.onLeave = this.onLeave.bind(this);
+	}
 	async componentDidMount() {
+		const user = auth.getCurrentUser();
+		this.setState({ user });
+
 		const { data: offer } = await getOffer(this.props.match.params.offerId);
 		this.setState({ data: offer });
 		console.log(offer);
 	}
+
+	async onJoin() {
+		const { data } = this.state;
+		try {
+			await joinOffer(this.state.data._id);
+			data.users.push(this.state.user);
+			this.setState({ data });
+			toast.success('You successfully joined the offer');
+		} catch (ex) {
+			console.log(ex);
+		}
+	}
+
+	async onLeave() {
+		const { data } = this.state;
+		try {
+			await leaveOffer(this.state.data._id);
+			data.users = data.users.filter(user => user._id !== this.state.user._id);
+			this.setState(data);
+			toast.success('You successfully left the offer');
+		} catch (ex) {
+			console.log(ex);
+		}
+	}
+
 	render() {
 		const {
+			_id: offerId,
 			type,
 			ownerId: { username },
 			eventId: { name },
 			eventId: { city },
 			users,
 			maxNumUsers,
-			description
+			description,
+			chat
 		} = this.state.data;
+		const { user } = this.state;
+		const isUserJoined =
+			user && users && users.some(oneUser => oneUser._id === user._id);
+		console.log(isUserJoined);
 		const usedPlaces =
 			users &&
 			users.reduce(acc => {
@@ -61,43 +103,47 @@ class OneOffer extends Component {
 							<div className="text-white">Description</div>
 							<div className="ml-3">{description}</div>
 						</li>
+						<li className="list-group-item list-group-item-light d-flex flex-column">
+							<span className="border-bottom border-primary">Participants</span>
+							{users &&
+								users.map((user, i) => (
+									<div key={i}>
+										<img
+											className="mt-2 mr-2"
+											src="http://via.placeholder.com/50x50"
+											alt="Concert card image"
+											width="50"
+											height="50"
+										/>
+										<p className="d-inline-block align-bottom">
+											{user.username}, {user.age} years old
+										</p>
+									</div>
+								))}
+						</li>
 						<li className="list-group-item">
-							<button className="btn btn-success btn-lg btn-block">Join</button>{' '}
+							{!isUserJoined && (
+								<button
+									onClick={this.onJoin}
+									className="btn btn-success btn-lg btn-block"
+								>
+									Join
+								</button>
+							)}
+							{isUserJoined && (
+								<button
+									onClick={this.onLeave}
+									className="btn btn-danger btn-lg btn-block"
+								>
+									Leave
+								</button>
+							)}
 						</li>
 					</ul>
 				</div>
 				<div className="col-md-5">
-					<ul className="list-group">
-						<li className="list-group-item list-group-item-dark">Chat</li>
-						<li className="list-group-item h-50">
-							<div className="row mb-2">
-								<div className="col-md-2">Janusz</div>
-								<div className="col-md-5 bg-secondary text-white rounded">
-									Jakas wiadomosc
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-2 ml-auto">Topek</div>
-								<div className="col-md-5 bg-info text-white">
-									jakas wiadomosc dluzsza
-								</div>
-							</div>
-						</li>
-						<li className="list-group-item p-0">
-							<div className="input-group rounded-0">
-								<input
-									type="text"
-									className="form-control"
-									placeholder="Recipient's username"
-								/>
-								<div className="input-group-append">
-									<button type="button" className="btn btn-success">
-										Send
-									</button>
-								</div>
-							</div>
-						</li>
-					</ul>
+					{offerId &&
+						isUserJoined && <Chat messages={chat} offerId={offerId} />}
 				</div>
 			</div>
 		);

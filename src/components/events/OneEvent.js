@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import { Link } from 'react-router-dom';
 import { getEvent } from '../../services/eventService';
+import { saveOffer } from '../../services/offerService';
 import OfferCard from './OfferCard';
 import moment from 'moment';
+import { toast } from 'react-toastify';
+import auth from '../../services/authService';
 
 class OneEvent extends Component {
-	state = {
-		data: {
-			_id: '',
-			name: '',
-			city: '',
-			venue: '',
-			genre: '',
-			date: '',
-			description: '',
-			photo: ''
-		}
-	};
+	constructor() {
+		super();
+		this.state = {
+			data: {
+				_id: '',
+				name: '',
+				city: '',
+				venue: '',
+				genre: '',
+				date: '',
+				description: '',
+				photo: ''
+			}
+		};
+	}
 
 	async populateEvent() {
 		try {
@@ -32,6 +39,9 @@ class OneEvent extends Component {
 
 	async componentDidMount() {
 		await this.populateEvent();
+		const user = auth.getCurrentUser();
+		this.setState({ user });
+		console.log(this.props.location);
 	}
 	render() {
 		const {
@@ -70,12 +80,14 @@ class OneEvent extends Component {
 						</ul>
 					</div>
 					<div className="col-md-9">
-						<button
-							type="button"
-							className="btn btn-outline-primary btn-lg btn-block"
-						>
-							Add Offer
-						</button>
+						<Link to={`${this.props.location.pathname}/addOffer/new`}>
+							<button
+								type="button"
+								className="btn btn-outline-primary btn-lg btn-block"
+							>
+								Add Offer
+							</button>
+						</Link>
 						<div className="row">
 							{offers &&
 								offers.map((offer, i) => (

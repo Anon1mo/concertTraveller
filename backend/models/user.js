@@ -40,7 +40,13 @@ const userSchema = new Schema({
 
 userSchema.methods.generateAuthToken = function() {
 	const token = jwt.sign(
-		{ _id: this._id, username: this.username, isAdmin: this.isAdmin },
+		{
+			_id: this._id,
+			username: this.username,
+			email: this.email,
+			age: this.age,
+			isAdmin: this.isAdmin
+		},
 		process.env.jwtPrivateKey
 	);
 	return token;

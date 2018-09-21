@@ -45,3 +45,7 @@ export function joinOffer(offerId) {
 export function leaveOffer(offerId) {
 	return http.put(`${offerUrl(offerId)}/leave`);
 }
+
+export function sendMessage(offerId, message) {
+	return http.post(`${offerUrl(offerId)}/message`, message);
+}

@@ -4,12 +4,20 @@ import Input from './input';
 import Select from './select';
 
 class Form extends Component {
-	state = {
-		data: {},
-		errors: {}
-	};
+	constructor() {
+		super();
+		this.state = {};
+		this.validate = this.validate.bind(this);
+		this.validateProperty = this.validateProperty.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	// state = {
+	// 	data: {},
+	// 	errors: {}
+	// };
 
-	validate = () => {
+	validate() {
 		const options = { abortEarly: false };
 		const { error } = Joi.validate(this.state.data, this.schema, options);
 		if (!error) return null;
@@ -17,23 +25,23 @@ class Form extends Component {
 		const errors = {};
 		for (let item of error.details) errors[item.path[0]] = item.message;
 		return errors;
-	};
+	}
 
-	validateProperty = ({ name, value }) => {
+	validateProperty({ name, value }) {
 		const obj = { [name]: value };
 		const schema = { [name]: this.schema[name] };
 		const { error } = Joi.validate(obj, schema);
 		return error ? error.details[0].message : null;
-	};
+	}
 
-	handleSubmit = e => {
+	handleSubmit(e) {
 		e.preventDefault();
 		const errors = this.validate();
 		this.setState({ errors: errors || {} });
 		if (errors) return;
 
 		this.doSubmit();
-	};
+	}
 
 	handleChange = ({ currentTarget: input }) => {
 		const errors = { ...this.state.errors };

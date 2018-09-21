@@ -6,10 +6,14 @@ import Form from './common/form';
 import auth from '../services/authService';
 
 class LoginForm extends Form {
-	state = {
-		data: { email: '', password: '' },
-		errors: {}
-	};
+	constructor() {
+		super();
+		this.state = {
+			data: { email: '', password: '' },
+			errors: {}
+		};
+		this.doSubmit = this.doSubmit.bind(this);
+	}
 
 	schema = {
 		email: Joi.string()
@@ -20,10 +24,9 @@ class LoginForm extends Form {
 			.label('Password')
 	};
 
-	doSubmit = async () => {
+	async doSubmit() {
 		try {
 			const { data } = this.state;
-			console.log(data);
 			await auth.login(data.email, data.password);
 
 			const { state } = this.props.location;
@@ -35,14 +38,14 @@ class LoginForm extends Form {
 				this.setState({ errors });
 			}
 		}
-	};
+	}
 
 	render() {
 		if (auth.getCurrentUser()) return <Redirect to="/" />;
 		return (
 			<div className="mx-auto w-50">
 				<h1>Login</h1>
-				<form onSubmit={this.handleSubmit2}>
+				<form onSubmit={this.handleSubmit}>
 					{this.renderInput('email', 'Email')}
 					{this.renderInput('password', 'Password', 'password')}
 					{this.renderButton('Login')}

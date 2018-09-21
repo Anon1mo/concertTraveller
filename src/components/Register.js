@@ -1,14 +1,18 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Joi from 'joi-browser';
 import Form from './common/form';
 import * as userService from '../services/userService';
 import auth from '../services/authService';
 
 class Register extends Form {
-	state = {
-		data: { username: '', password: '', email: '', age: '' },
-		errors: {}
-	};
+	constructor() {
+		super();
+		this.state = {
+			data: { username: '', password: '', email: '', age: '' },
+			errors: {}
+		};
+	}
 
 	schema = {
 		username: Joi.string()
@@ -24,13 +28,17 @@ class Register extends Form {
 			.label('Email'),
 		age: Joi.number()
 			.required()
+			.min(15)
 			.label('Age')
 	};
 
-	doSubmit = async () => {
+	async doSubmit() {
 		try {
 			const response = await userService.register(this.state.data);
 			auth.loginWithJwt(response.headers['x-auth-token']);
+
+			const { state } = this.props.location;
+			window.location = state ? state.from.pathname : '/';
 		} catch (ex) {
 			if (ex.response && ex.response.status === 400) {
 				const errors = { ...this.state.errors };
@@ -38,9 +46,10 @@ class Register extends Form {
 				this.setState({ errors });
 			}
 		}
-	};
+	}
 
 	render() {
+		if (auth.getCurrentUser()) return <Redirect to="/" />;
 		return (
 			<div className="mx-auto w-50">
 				<h1>Register</h1>
