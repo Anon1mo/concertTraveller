@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import auth from '../../services/authService';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
 	return (
@@ -24,3 +26,11 @@ const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
 };
 
 export default ProtectedRoute;
+
+ProtectedRoute.propTypes = {
+	path: PropTypes.string,
+	component: PropTypes.func,
+	render: PropTypes.func,
+	rest: PropTypes.object,
+	location: ReactRouterPropTypes.location
+};

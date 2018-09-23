@@ -37,8 +37,9 @@ class OneOffer extends Component {
 			data.users.push(this.state.user);
 			this.setState({ data });
 			toast.success('You successfully joined the offer');
-		} catch (ex) {
-			console.log(ex);
+		} catch (err) {
+			this.setState({ err });
+			toast.error(err.response.data);
 		}
 	}
 
@@ -49,8 +50,8 @@ class OneOffer extends Component {
 			data.users = data.users.filter(user => user._id !== this.state.user._id);
 			this.setState(data);
 			toast.success('You successfully left the offer');
-		} catch (ex) {
-			console.log(ex);
+		} catch (err) {
+			toast.error(err.response.data);
 		}
 	}
 
@@ -58,7 +59,7 @@ class OneOffer extends Component {
 		const {
 			_id: offerId,
 			type,
-			ownerId: { username },
+			ownerId: { username, _id: ownerId },
 			eventId: { name },
 			eventId: { city },
 			users,
@@ -69,7 +70,7 @@ class OneOffer extends Component {
 		const { user } = this.state;
 		const isUserJoined =
 			user && users && users.some(oneUser => oneUser._id === user._id);
-		console.log(isUserJoined);
+		const isOwner = user && user._id === ownerId;
 		const usedPlaces =
 			users &&
 			users.reduce(acc => {
@@ -121,29 +122,34 @@ class OneOffer extends Component {
 									</div>
 								))}
 						</li>
-						<li className="list-group-item">
-							{!isUserJoined && (
-								<button
-									onClick={this.onJoin}
-									className="btn btn-success btn-lg btn-block"
-								>
-									Join
-								</button>
+						{user &&
+							!isOwner && (
+								<li className="list-group-item">
+									{!isUserJoined && (
+										<button
+											onClick={this.onJoin}
+											className="btn btn-success btn-lg btn-block"
+										>
+											Join
+										</button>
+									)}
+									{isUserJoined && (
+										<button
+											onClick={this.onLeave}
+											className="btn btn-danger btn-lg btn-block"
+										>
+											Leave
+										</button>
+									)}
+								</li>
 							)}
-							{isUserJoined && (
-								<button
-									onClick={this.onLeave}
-									className="btn btn-danger btn-lg btn-block"
-								>
-									Leave
-								</button>
-							)}
-						</li>
 					</ul>
 				</div>
 				<div className="col-md-5">
 					{offerId &&
-						isUserJoined && <Chat messages={chat} offerId={offerId} />}
+						(isUserJoined || isOwner) && (
+							<Chat messages={chat} offerId={offerId} />
+						)}
 				</div>
 			</div>
 		);

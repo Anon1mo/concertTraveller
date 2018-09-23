@@ -21,6 +21,11 @@ export function getEventOffers(eventId) {
 	return http.get(`${apiEndpoint}?${queryParameter}=${eventId}`);
 }
 
+export function getOwnerOffers(ownerId) {
+	const queryParameter = 'ownerId';
+	return http.get(`${apiEndpoint}?${queryParameter}=${ownerId}`);
+}
+
 export function getOffer(offerId) {
 	return http.get(offerUrl(offerId));
 }

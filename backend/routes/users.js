@@ -21,8 +21,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-	const user = await User.find({ _id: req.params.id });
-
+	const user = await User.findOne({ _id: req.params.id }).select('-password');
 	res.send(user);
 });
 

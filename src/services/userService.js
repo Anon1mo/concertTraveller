@@ -3,6 +3,10 @@ import { apiUrl } from '../config.json';
 
 const apiEndpoint = `${apiUrl}/users`;
 
+function userUrl(id) {
+	return `${apiEndpoint}/${id}`;
+}
+
 export function register(user) {
 	return http.post(apiEndpoint, {
 		username: user.username,
@@ -16,6 +20,10 @@ export function getUsers() {
 	return http.get(apiEndpoint);
 }
 
-export function getUser() {
+export function getMe() {
 	return http.get(`${apiEndpoint}/me`);
+}
+
+export function getUser(userId) {
+	return http.get(userUrl(userId));
 }

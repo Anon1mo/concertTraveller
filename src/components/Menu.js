@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 const Menu = ({ user }) => (
 	<nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 		<div className="container">
-			{' '}
 			<a className="navbar-brand" href="#">
 				Concert Traveller
 			</a>
@@ -27,16 +26,21 @@ const Menu = ({ user }) => (
 							Events
 						</NavLink>
 					</li>
-					<li className="nav-item">
-						<NavLink className="nav-link" to="/my_concerts">
-							My Events
-						</NavLink>
-					</li>
-					<li className="nav-item">
-						<NavLink className="nav-link" to="/admin_panel">
-							Admin Panel
-						</NavLink>
-					</li>
+					{user && (
+						<li className="nav-item">
+							<NavLink className="nav-link" to="/my_concerts">
+								My Events
+							</NavLink>
+						</li>
+					)}
+					{user &&
+						user.isAdmin && (
+							<li className="nav-item">
+								<NavLink className="nav-link" to="/admin_panel">
+									Admin Panel
+								</NavLink>
+							</li>
+						)}
 				</ul>
 				<ul className="navbar-nav ml-auto">
 					{!user && (
@@ -56,7 +60,7 @@ const Menu = ({ user }) => (
 					{user && (
 						<React.Fragment>
 							<li className="nav-item">
-								<NavLink className="nav-link" to="/profile">
+								<NavLink className="nav-link" to={`/users/${user._id}`}>
 									{user.username}
 								</NavLink>
 							</li>

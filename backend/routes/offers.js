@@ -21,21 +21,19 @@ async function getOffers(target, id) {
 router.get('/', async (req, res) => {
 	let offers;
 	if (req.query.userId) {
-		offers = await Offer.find({ users: req.params.userId })
-			.populate('ownerId')
-			.populate('eventId')
-			.populate('users');
+		offers = Offer.find({ users: req.query.userId });
+	} else if (req.query.ownerId) {
+		offers = Offer.find({ ownerId: req.query.ownerId });
 	} else if (req.query.eventId) {
-		offers = await Offer.find({ eventId: req.params.eventId })
-			.populate('ownerId')
-			.populate('eventId')
-			.populate('users');
+		offers = Offer.find({ eventId: req.query.eventId });
 	} else {
-		offers = await Offer.find()
-			.populate('ownerId')
-			.populate('eventId')
-			.populate('users');
+		offers = Offer.find();
 	}
+
+	offers = await offers
+		.populate('ownerId')
+		.populate('eventId')
+		.populate('users');
 
 	res.send(offers);
 });
@@ -59,9 +57,9 @@ router.post('/', async (req, res) => {
 	relatedEvent.offers.push(newOffer._id);
 	await relatedEvent.save();
 
-	let relatedUser = await User.findById(newOffer.ownerId);
-	relatedUser.offers.push(newOffer._id);
-	await relatedUser.save();
+	// let relatedUser = await User.findById(newOffer.ownerId);
+	// relatedUser.offers.push(newOffer._id);
+	// await relatedUser.save();
 
 	res.send(newOffer);
 });
@@ -113,10 +111,11 @@ router.delete('/:id', validateObjectId, async (req, res) => {
 // joining the offer with given id
 router.put('/:id/join', [auth, validateObjectId], async (req, res) => {
 	const offer = await Offer.findById(req.params.id);
-
+	console.log(offer.ownerId);
+	console.log(req.user._id);
 	if (!offer)
 		return res.status(404).send('The offer with the given ID was not found');
-	if (req.user._id === offer.ownerId)
+	if (offer.ownerId.equals(req.user._id))
 		return res
 			.status(403)
 			.send('You cannot join, because you created this event');

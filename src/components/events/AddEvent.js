@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import PropTypes from 'prop-types';
-import AddOffer from './AddOffer';
 import Joi from 'joi-browser';
 import Form from '../common/form';
 import { getEvent, saveEvent } from '../../services/eventService';
+import { formatDateToString } from '../../utils/formatDate';
+import { Toast as toast } from 'react-toastify';
 
 class AddEvent extends Form {
 	constructor() {
@@ -23,35 +23,37 @@ class AddEvent extends Form {
 	}
 
 	schema = {
+		_id: Joi.string(),
 		name: Joi.string()
-			.min(5)
+			.min(1)
 			.max(50)
 			.required(),
 		city: Joi.string()
-			.min(5)
+			.min(1)
 			.max(50)
 			.required(),
 		venue: Joi.string()
-			.min(5)
+			.min(1)
 			.max(50)
 			.required(),
 		genre: Joi.string()
-			.min(5)
 			.max(20)
 			.required(),
-		date: Joi.date()
-			.format('YYYY-MM-DD')
-			.required(),
+		date: Joi.date().required(),
 		description: Joi.string().max(255)
 	};
 
 	async populateEvent() {
 		try {
 			const eventId = this.props.match.params.id;
-			if (eventId === 'new') return;
+			if (eventId === 'new') {
+				this.setState({ eventId });
+				return;
+			}
 
-			const { data: event } = await getEvent(eventId);
-			this.setState({ data: this.mapToViewModel(event) });
+			let { data: event } = await getEvent(eventId);
+			event = formatDateToString(event);
+			this.setState({ data: this.mapToViewModel(event), eventId });
 		} catch (ex) {
 			if (ex.response && ex.response.status === 404)
 				this.props.history.replace('/not-found');
@@ -75,15 +77,22 @@ class AddEvent extends Form {
 	}
 
 	async doSubmit() {
-		await saveEvent(this.state.data);
+		try {
+			await saveEvent(this.state.data);
+		} catch (ex) {
+			toast.error(ex.response.data);
+		}
 
-		this.props.history.push('/events');
+		this.props.history.goBack();
+		//this.props.history.push('/events');
 	}
 	render() {
+		const headerText =
+			this.state.eventId === 'new' ? 'Add Event' : 'Edit Event';
 		return (
-			<div>
-				<h1>Event Form</h1>
-				<form onSubmit={this.handleSubmit}>
+			<div className="w-50 mx-auto bg-light text-dark">
+				<h1 className="text-center py-2">{headerText}</h1>
+				<form onSubmit={this.handleSubmit} className="p-3">
 					{this.renderInput('name', 'Name')}
 					{this.renderInput('genre', 'Genre')}
 					{this.renderInput('venue', 'Venue')}

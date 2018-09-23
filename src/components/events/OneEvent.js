@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { Link } from 'react-router-dom';
 import { getEvent } from '../../services/eventService';
-import { saveOffer } from '../../services/offerService';
 import OfferCard from './OfferCard';
 import moment from 'moment';
-import { toast } from 'react-toastify';
 import auth from '../../services/authService';
 
 class OneEvent extends Component {
@@ -44,16 +42,7 @@ class OneEvent extends Component {
 		console.log(this.props.location);
 	}
 	render() {
-		const {
-			_id,
-			name,
-			city,
-			venue,
-			genre,
-			date,
-			description,
-			offers
-		} = this.state.data;
+		const { name, city, venue, date, description, offers } = this.state.data;
 		return (
 			<div className="bg-light text-dark">
 				<h1 className="text-center py-3">{this.state.data.name}</h1>
@@ -80,15 +69,21 @@ class OneEvent extends Component {
 						</ul>
 					</div>
 					<div className="col-md-9">
-						<Link to={`${this.props.location.pathname}/addOffer/new`}>
-							<button
-								type="button"
-								className="btn btn-outline-primary btn-lg btn-block"
-							>
-								Add Offer
-							</button>
-						</Link>
+						{this.state.user && (
+							<Link to={`${this.props.location.pathname}/addOffer/new`}>
+								<button
+									type="button"
+									className="btn btn-outline-primary btn-lg btn-block"
+								>
+									Add Offer
+								</button>
+							</Link>
+						)}
 						<div className="row">
+							{offers &&
+								offers.length === 0 && (
+									<h2 className="text-muted">No offers for this event yet</h2>
+								)}
 							{offers &&
 								offers.map((offer, i) => (
 									<div className="col-md-6" key={i}>

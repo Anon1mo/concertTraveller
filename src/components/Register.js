@@ -52,7 +52,7 @@ class Register extends Form {
 		if (auth.getCurrentUser()) return <Redirect to="/" />;
 		return (
 			<div className="mx-auto w-50">
-				<h1>Register</h1>
+				<h1 className="text-center py-2">Register</h1>
 				<form onSubmit={this.handleSubmit}>
 					{this.renderInput('username', 'Username')}
 					{this.renderInput('email', 'Email')}

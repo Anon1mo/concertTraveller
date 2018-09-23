@@ -5,6 +5,7 @@ import Menu from './Menu';
 import Main from './Main';
 import auth from '../services/authService';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Footer';
 
 class App extends Component {
 	state = {};
@@ -20,6 +21,7 @@ class App extends Component {
 				<ToastContainer />
 				<Menu user={this.state.user} />
 				<Main />
+				<Footer />
 			</div>
 		);
 	}

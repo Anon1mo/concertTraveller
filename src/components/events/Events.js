@@ -5,63 +5,64 @@ import ConcertGenreSelect from './ConcertGenreSelect';
 import ConcertCard from './ConcertCard';
 import Pagination from './Pagination';
 import { getEvents } from '../../services/eventService';
+import { paginate } from '../../utils/paginate';
 import moment from 'moment';
 
-let events = [
-	{
-		name: 'Radiohead',
-		location: 'Berlin',
-		venue: 'Tempodrom',
-		date: moment('2018-07-07'),
-		description: 'najlepszy band',
-		genre: 'alternative'
-	},
-	{
-		name: 'Beach House',
-		location: 'Berlin',
-		venue: 'Huxleys Neue Welt',
-		date: moment('2018-10-14'),
-		description: 'Bicz Haus',
-		genre: 'dreampop'
-	},
-	{
-		name: 'Mac DeMarco',
-		location: 'Warsaw',
-		venue: 'Proxima',
-		date: moment('2018-11-22'),
-		description: 'Mak i jego chlopaki',
-		genre: 'indie'
-	},
-	{
-		name: 'Tame Impala',
-		location: 'Berlin',
-		venue: 'Tempodrom',
-		date: moment('2018-07-07'),
-		description: 'najlepszy band',
-		genre: 'alternative'
-	},
-	{
-		name: 'Snail Mail',
-		location: 'Berlin',
-		venue: 'Huxleys Neue Welt',
-		date: moment('2018-10-14'),
-		description: 'Bicz Haus',
-		genre: 'dreampop'
-	},
-	{
-		name: 'LCD Soundsystem',
-		location: 'Warsaw',
-		venue: 'Proxima',
-		date: moment('2018-11-22'),
-		description: 'Mak i jego chlopaki',
-		genre: 'indie'
-	}
-];
+// let events = [
+// 	{
+// 		name: 'Radiohead',
+// 		location: 'Berlin',
+// 		venue: 'Tempodrom',
+// 		date: moment('2018-07-07'),
+// 		description: 'najlepszy band',
+// 		genre: 'alternative'
+// 	},
+// 	{
+// 		name: 'Beach House',
+// 		location: 'Berlin',
+// 		venue: 'Huxleys Neue Welt',
+// 		date: moment('2018-10-14'),
+// 		description: 'Bicz Haus',
+// 		genre: 'dreampop'
+// 	},
+// 	{
+// 		name: 'Mac DeMarco',
+// 		location: 'Warsaw',
+// 		venue: 'Proxima',
+// 		date: moment('2018-11-22'),
+// 		description: 'Mak i jego chlopaki',
+// 		genre: 'indie'
+// 	},
+// 	{
+// 		name: 'Tame Impala',
+// 		location: 'Berlin',
+// 		venue: 'Tempodrom',
+// 		date: moment('2018-07-07'),
+// 		description: 'najlepszy band',
+// 		genre: 'alternative'
+// 	},
+// 	{
+// 		name: 'Snail Mail',
+// 		location: 'Berlin',
+// 		venue: 'Huxleys Neue Welt',
+// 		date: moment('2018-10-14'),
+// 		description: 'Bicz Haus',
+// 		genre: 'dreampop'
+// 	},
+// 	{
+// 		name: 'LCD Soundsystem',
+// 		location: 'Warsaw',
+// 		venue: 'Proxima',
+// 		date: moment('2018-11-22'),
+// 		description: 'Mak i jego chlopaki',
+// 		genre: 'indie'
+// 	}
+// ];
 
 class Events extends Component {
 	state = {
-		events,
-		genres: events.reduce((prev, next) => [...prev, next.genre], []),
+		events: [],
+		genres: [],
 		filterSearch: '',
 		filterGenre: '',
 		filterDate: '',
@@ -70,14 +71,20 @@ class Events extends Component {
 	};
 
 	async componentDidMount() {
-		this.setState({
-			lastPage: Math.ceil(this.state.events.length / this.state.eventsPerPage)
-		});
-
-		let { data } = await getEvents();
-		data = this.mapDateToMoment(data);
-		this.setState({ events: data });
+		let { data: events } = await getEvents();
+		const genres = this.getGenres(events);
+		events = this.mapDateToMoment(events);
+		this.setState({ events, genres });
 	}
+
+	getGenres = events =>
+		events.reduce((prev, next) => {
+			if (prev.includes(next.genre)) {
+				return prev;
+			} else {
+				return [...prev, next.genre];
+			}
+		}, []);
 
 	mapDateToMoment(data) {
 		return data.map(el => {
@@ -128,8 +135,8 @@ class Events extends Component {
 		console.log(this.state.currentPage);
 	};
 
-	handlePaginationNext = () => {
-		if (this.state.currentPage === this.state.lastPage) {
+	handlePaginationNext = lastPage => {
+		if (this.state.currentPage === lastPage) {
 			return;
 		}
 		this.setState(prevState => ({
@@ -138,19 +145,8 @@ class Events extends Component {
 		console.log(this.state.currentPage);
 	};
 
-	generatePageNumbers = () => {
-		const pageNumbers = [];
-		for (let i = 1; i <= this.state.lastPage; i++) {
-			pageNumbers.push(i);
-		}
-
-		return pageNumbers;
-	};
-
-	render() {
-		const indexOfLastTodo = this.state.currentPage * this.state.eventsPerPage;
-		const indexOfFirstTodo = indexOfLastTodo - this.state.eventsPerPage;
-		let eventsToRender = this.state.events
+	getPagedEvents = () => {
+		let filteredEvents = this.state.events
 			? this.state.events
 					.filter(event =>
 						event.genre
@@ -165,8 +161,28 @@ class Events extends Component {
 							.toLowerCase()
 							.includes(this.state.filterSearch.toLowerCase())
 					)
-					.slice(indexOfFirstTodo, indexOfLastTodo)
 			: [];
+
+		if (filteredEvents.length !== 0) {
+			const paginatedEvents = paginate(
+				filteredEvents,
+				this.state.currentPage,
+				this.state.eventsPerPage
+			);
+			return {
+				events: paginatedEvents,
+				eventsCount: filteredEvents.length
+			};
+		} else {
+			return {
+				events: filteredEvents,
+				eventsCount: filteredEvents.length
+			};
+		}
+	};
+
+	render() {
+		let { eventsCount, events: eventsToRender } = this.getPagedEvents();
 		return (
 			<main className="container">
 				<h1 className="text-center">Events</h1>
@@ -183,6 +199,9 @@ class Events extends Component {
 					<DatePick onChangeParent={this.onDateChange} />
 				</div>
 				<div className="row">
+					{eventsToRender.length === 0 && (
+						<h2 className="text-muted">No events with these specifications</h2>
+					)}
 					{eventsToRender.map((event, i) => (
 						<div className="col-md-3" key={i}>
 							<ConcertCard key={i} {...event} />
@@ -194,7 +213,8 @@ class Events extends Component {
 					onPrev={this.handlePaginationPrev}
 					onNext={this.handlePaginationNext}
 					currentPage={this.state.currentPage}
-					pageNumbers={this.generatePageNumbers()}
+					eventsPerPage={this.state.eventsPerPage}
+					eventsCount={eventsCount}
 				/>
 			</main>
 		);

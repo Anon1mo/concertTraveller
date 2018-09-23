@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import auth from '../../services/authService';
 import { sendMessage } from '../../services/offerService';
+import { Toast as toast } from 'react-toastify';
 
 class Chat extends Component {
 	constructor() {
@@ -40,12 +41,17 @@ class Chat extends Component {
 		};
 
 		try {
-			chat.push(message);
-			this.setState({ chat });
+			const chatWithMessage = [...chat, message];
+			this.setState({
+				data: {
+					chat: chatWithMessage
+				},
+				message: ''
+			});
 			await sendMessage(this.props.offerId, message);
 		} catch (ex) {
-			this.setState({ chat });
-			console.log(ex);
+			this.setState({ chat, message: '' });
+			toast.error(ex.response.data);
 		}
 	}
 

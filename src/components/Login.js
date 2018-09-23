@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { Redirect } from 'react-router-dom';
 import Joi from 'joi-browser';
@@ -44,7 +44,7 @@ class LoginForm extends Form {
 		if (auth.getCurrentUser()) return <Redirect to="/" />;
 		return (
 			<div className="mx-auto w-50">
-				<h1>Login</h1>
+				<h1 className="text-center py-2">Login</h1>
 				<form onSubmit={this.handleSubmit}>
 					{this.renderInput('email', 'Email')}
 					{this.renderInput('password', 'Password', 'password')}
