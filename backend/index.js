@@ -1,6 +1,6 @@
 require('dotenv').config();
 const path = require('path');
-const open = require('open');
+//const open = require('open');
 const morgan = require('morgan');
 const express = require('express');
 const webpack = require('webpack');
@@ -55,7 +55,7 @@ app.listen(port, error => {
 	if (error) {
 		console.log(error);
 	} else {
-		open(`http://localhost:${port}`);
+		//open(`http://localhost:${port}`);
 		console.log(`Listening on port ${port}`);
 	}
 });
