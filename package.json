@@ -13,6 +13,9 @@
 		"start-dev": "webpack-dev-server --config webpack.dev.js",
 		"test": "jest ./test"
 	},
+	"engines": {
+		"node": "8.9.1"
+	},
 	"author": "Piotr Jakubowski",
 	"license": "ISC",
 	"dependencies": {
