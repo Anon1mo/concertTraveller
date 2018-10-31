@@ -13,9 +13,9 @@ const Home = () => (
 				</p>
 				<p>
 					<Link to="/events">
-						<a className="btn btn-primary btn-lg" href="#" role="button">
+						<button className="btn btn-primary btn-lg" href="#" role="button">
 							Find more and try it &raquo;
-						</a>
+						</button>
 					</Link>
 				</p>
 			</div>

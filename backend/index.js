@@ -19,16 +19,34 @@ require('./startup/validation')();
 
 require('./models/sampleData')();
 
-const compiler = webpack(config);
 //webpack
-app.use(
-	require('webpack-dev-middleware')(compiler, {
-		hot: true,
-		noInfo: true,
-		publicPath: config.output.publicPath
-	})
-);
-app.use(require('webpack-hot-middleware')(compiler));
+if (process.env.NODE_ENV !== 'production') {
+	const compiler = webpack(config);
+
+	app.use(
+		require('webpack-dev-middleware')(compiler, {
+			hot: true,
+			noInfo: true,
+			publicPath: config.output.publicPath
+		})
+	);
+	app.use(require('webpack-hot-middleware')(compiler));
+}
+
+app.get('/api/fibonnaci/:num', (req, res) => {
+	const num = req.params.num;
+
+	function fibonacci(num) {
+		if (num <= 1) return 1;
+
+		return fibonacci(num - 1) + fibonacci(num - 2);
+	}
+
+	const fibo = fibonacci(num);
+
+	console.log(fibo);
+	res.send({ fibo });
+});
 
 app.get('/*', (req, res) =>
 	res.sendFile(path.join(__dirname, '../dist/index.html'))

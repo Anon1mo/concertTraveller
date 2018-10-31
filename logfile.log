@@ -128,3 +128,36 @@
 {"message":"Event validation failed: date: Event should take place in the future","errors":{"date":{"message":"Event should take place in the future","name":"ValidatorError","properties":{"message":"Event should take place in the future","type":"user defined","path":"date","value":"2018-09-23T00:00:00.000Z"},"kind":"user defined","path":"date","value":"2018-09-23T00:00:00.000Z","$isValidatorError":true}},"_message":"Event validation failed","stack":"ValidationError: Event validation failed: date: Event should take place in the future\n    at new ValidationError (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/error/validation.js:27:11)\n    at model.Document.invalidate (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/document.js:1656:32)\n    at /Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/document.js:1528:17\n    at Immediate._onImmediate (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/schematype.js:785:9)\n    at runCallback (timers.js:789:20)\n    at tryOnImmediate (timers.js:751:5)\n    at processImmediate [as _immediateCallback] (timers.js:722:5)","name":"ValidationError","level":"error","timestamp":"2018-09-23T21:35:50.546Z"}
 {"message":"Event validation failed: date: Event should take place in the future","errors":{"date":{"message":"Event should take place in the future","name":"ValidatorError","properties":{"message":"Event should take place in the future","type":"user defined","path":"date","value":"2018-09-23T00:00:00.000Z"},"kind":"user defined","path":"date","value":"2018-09-23T00:00:00.000Z","$isValidatorError":true}},"_message":"Event validation failed","stack":"ValidationError: Event validation failed: date: Event should take place in the future\n    at new ValidationError (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/error/validation.js:27:11)\n    at model.Document.invalidate (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/document.js:1656:32)\n    at /Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/document.js:1528:17\n    at Immediate._onImmediate (/Users/anon1m/WebstormProjects/concertTraveller/node_modules/mongoose/lib/schematype.js:785:9)\n    at runCallback (timers.js:789:20)\n    at tryOnImmediate (timers.js:751:5)\n    at processImmediate [as _immediateCallback] (timers.js:722:5)","name":"ValidationError","level":"error","timestamp":"2018-09-23T21:36:10.262Z"}
 {"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-23T22:30:20.386Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-28T00:16:00.974Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-28T13:57:17.437Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:15:45.866Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:21:04.559Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:22:09.286Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:23:26.931Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:24:48.985Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:26:49.394Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:27:41.463Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:28:12.589Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:45:11.827Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T15:45:50.141Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T16:01:03.674Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-09-30T16:01:57.582Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-03T07:19:24.980Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-03T09:16:19.704Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-03T10:27:59.778Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:23:43.473Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:30:58.644Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:35:05.874Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:37:53.063Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:40:34.431Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:52:41.039Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:54:40.056Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T17:55:03.139Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T18:11:41.177Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T18:13:47.711Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T18:31:16.587Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T18:33:43.410Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T19:01:02.216Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T19:03:22.499Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T19:06:03.369Z"}
+{"level":"info","message":"connected to mongodb://localhost/concertTraveller...","timestamp":"2018-10-31T19:38:08.897Z"}
