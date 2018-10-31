@@ -1,12 +1,5 @@
 {
 	"presets": ["env", "react", "stage-2"],
-	// "env": {
-	// 	"development": {
-	// 		"presets": [
-	// 			"react-hmre"
-	// 		]
-	// 	}
-	// },
 	"env": {
 		"development": {
 			"plugins": ["react-hot-loader/babel"]
@@ -25,5 +18,5 @@
 		"transform-object-assign",
 		"transform-class-bound-properties",
 		"transform-class-properties"
-	] //, "react-hot-loader/babel"]
+	]
 }
