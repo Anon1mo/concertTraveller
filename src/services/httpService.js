@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-axios.defaults.baseURL = 'https://concerttraveller.herokuapp.com/api';
+axios.defaults.baseURL = 'http://localhost:4000/api';
 
 axios.interceptors.response.use(null, error => {
 	const expectedError =
