@@ -11,7 +11,8 @@
 		"start": "node ./backend/index.js",
 		"start-back": "nodemon ./backend/index.js",
 		"start-dev": "webpack-dev-server --config webpack.dev.js",
-		"test": "jest ./test"
+		"test": "jest ./test",
+		"heroku-postbuild": "node ./backend/index.js"
 	},
 	"engines": {
 		"node": "8.9.1"
